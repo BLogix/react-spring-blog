@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8"/>
+
+        <!-- react 16.8.6 -->
+        <script src="js/libs/react.development.js"></script>
+        <script src="js/libs/react-dom.development.js"></script>
+
+        <script src='js/libs/react-router-dom.min.js'></script>
+
+        <!-- 
+            Once development work is done then use the minified production libs
+        -->
+        <!--script src="js/libs/react.production.min.js"></script>
+        <script src="js/libs/react-dom.production.min.js"></script-->
+
+        <!-- Babel 6.21.1-->
+        <!-- 
+            https://babeljs.io/en/setup 
+            - click on 'In the browser' for this application 
+            - it explains why we need to use the <script type="text/babel"> tag
+        -->
+        <script src='js/libs/babel.min.js'></script>
+
+        <!-- Any other libs can be imported using the script tag -->
+
+        <!-- Stylesheets -->
+        <link rel='stylesheet' href='style/index.css' type='text/css'>
+    </head>
+    <body>
+        <!-- ----------------------------------------------------------main container -->
+        <div id="root"></div>
+
+        <!-- -------------------------------------------------------react context api -->
+        <!-- 
+            * We want to use the Context API for passing data between many component 
+            * without the dependancy of having to pass them through the component tree
+            * 
+            * Reference Links
+            * -> https://reactjs.org/docs/context.html
+            * -> https://medium.com/@niwaa/simple-and-reusable-react-context-api-example-hoc-e1e50c0390ec
+            * 
+            * Main Concepts
+            * -> Provider -> allows for consuming components to subscribe to context changes
+            * -> Consumer -> a react component that subscribes to a consumer     
+        -->
+        <script type="text/babel">
+             //Context
+            const AppContext = React.createContext({
+                appStuff: {
+                    user: null,
+                    setUser: () => {}
+                }
+            })
+
+            //Consumer
+            const withContext = (Component)=>{
+                return function ContextComponent(props){
+                    return(
+                        <AppContext.Consumer>
+                            {(contexts) => <Component {...props} {...contexts}/>}
+                        </AppContext.Consumer>
+                    )
+                }
+            }
+
+            //Provider
+            class ContextProvider extends React.Component{
+                constructor(){
+                    super();
+
+                    this.state = {
+                        user: 'SomeGuy',
+                        setUser: this.setUser.bind(this)
+                    };
+                }
+
+                setUser(name){
+                    this.setState({user: name});
+                }
+
+                render(){
+                    return(
+                        <AppContext.Provider value={{appContext: {...this.state}}}>
+                            {this.props.children}
+                        </AppContext.Provider>
+                    )
+                }
+            }
+        </script>
+
+        <!-- form viewer -->
+        <script type='text/babel'>
+            class ViewerDef extends React.Component{
+                constructor(){
+                    super();
+            
+                    this.state = {
+                        name: '',
+                        email: ''
+                    }
+                }
+            
+                handleChange(event){
+            
+                }
+            
+                handleSubmit(event){
+                    
+                }
+            
+                render(){
+                    return(
+                        <div className={'viewer-wrapper'}>
+                            some stuff
+                        </div>
+                    )
+                }
+            }
+            
+            const Viewer = ViewerDef;
+        </script>
+
+        <!-- router -->
+        <script type='text/babel'>
+            const {BrowserRouter, Route} = ReactRouterDOM;
+
+            class App extends React.Component{
+                render(){
+                    return(
+                        <BrowserRouter>
+                            <Route path={'/'} component={Viewer}/>
+                        </BrowserRouter>
+                    )
+                }
+            }
+        </script>
+
+        <!-- index.js -->
+        <script type='text/babel'>
+            ReactDOM.render(
+                <ContextProvider>
+                    <App/>
+                </ContextProvider>, 
+                document.getElementById('root')
+            )
+        </script>
+    </body>
+</html>
