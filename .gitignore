@@ -1,4 +1,8 @@
-react-spring-boot/client/node_modules
-react-spring-boot/client/build
-react-spring-boot/service/.gradle
-react-spring-boot/service/build
+./react-spring-boot/client/node_modules
+./react-spring-boot/client/build
+./react-spring-boot/service/.gradle
+./react-spring-boot/service/build
+
+build
+*node_modules
+.gradle

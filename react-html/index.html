@@ -47,9 +47,12 @@
         <script type="text/babel">
              //Context
             const AppContext = React.createContext({
-                appStuff: {
-                    user: null,
-                    setUser: () => {}
+                foodContext: {
+                    foodTypes: [],
+                    meats: [],
+                    sides: [],
+                    orderSizes: [],
+                    orderNumber: ''
                 }
             })
 
@@ -70,18 +73,33 @@
                     super();
 
                     this.state = {
-                        user: 'SomeGuy',
-                        setUser: this.setUser.bind(this)
+                        foodTypes: [],
+                        meats: [],
+                        sides: [],
+                        orderSizes: [],
+                        orderNumber: ''
                     };
                 }
 
-                setUser(name){
-                    this.setState({user: name});
+                generateOrderNumber = () => Math.floor((Math.random() * 10) + 1);
+
+                componentWillMount(){
+                    const orderNum = this.generateOrderNumber();
+
+                    this.setState(
+                        {
+                            foodTypes: ['taco', 'burger', 'panini', 'sausage'],
+                            meats: ['chicken', 'beef', 'charizo', 'turkey'],
+                            sides: ['french fries', 'tots', 'chips', 'salad'],
+                            orderSizes: ['small', 'medium', 'large'],
+                            orderNumber: orderNum
+                        }
+                    )
                 }
 
                 render(){
                     return(
-                        <AppContext.Provider value={{appContext: {...this.state}}}>
+                        <AppContext.Provider value={{foodContext: {...this.state}}}>
                             {this.props.children}
                         </AppContext.Provider>
                     )
@@ -89,16 +107,24 @@
             }
         </script>
 
-        <!-- form viewer -->
+        <!-- survey -->
         <script type='text/babel'>
             class ViewerDef extends React.Component{
                 constructor(){
                     super();
             
                     this.state = {
-                        name: '',
-                        email: ''
+                        fullOrder: {}
                     }
+
+                    this.handleChange = this.handleChange.bind(this);
+                    this.handleSubmit = this.handleSubmit.bind(this);
+                }
+
+                retrieveSurveyOrder = () => {
+                    const foodTypes = this.props.foodContext.foodTypes;
+
+                    console.log('foodTypes', foodTypes[3]);
                 }
             
                 handleChange(event){
@@ -110,15 +136,24 @@
                 }
             
                 render(){
+                    const {orderNumber} = this.props.foodContext;
+
+                    this.retrieveSurveyOrder();
                     return(
-                        <div className={'viewer-wrapper'}>
-                            some stuff
+                        <div className={'wrapper'}>
+                            <h1>Thank You!</h1>
+                            <h4>Please Rate Our Food</h4>
+                            <p>order no: {orderNumber}</p>
+                            <section className={'form-center'}>
+                                <form onSubmit={this.handleSubmit}>
+                                </form>
+                            </section>
                         </div>
                     )
                 }
             }
             
-            const Viewer = ViewerDef;
+            const Viewer = withContext(ViewerDef);
         </script>
 
         <!-- router -->
