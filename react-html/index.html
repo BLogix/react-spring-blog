@@ -52,9 +52,10 @@
                     meats: [],
                     sides: [],
                     orderSizes: [],
-                    orderNumber: ''
+                    orderNumber: '',
+                    createOrder: () => {}
                 }
-            })
+            });
 
             //Consumer
             const withContext = (Component)=>{
@@ -65,7 +66,7 @@
                         </AppContext.Consumer>
                     )
                 }
-            }
+            };
 
             //Provider
             class ContextProvider extends React.Component{
@@ -73,31 +74,42 @@
                     super();
 
                     this.state = {
-                        foodTypes: [],
-                        meats: [],
-                        sides: [],
-                        orderSizes: [],
-                        orderNumber: ''
+                        foodTypes: ['taco', 'burger', 'panini', 'sausage'],
+                        meats: ['chicken', 'beef', 'charizo', 'turkey'],
+                        sides: ['french fries', 'tots', 'chips', 'salad'],
+                        orderSizes: ['small', 'medium', 'large'],
+                        orderNumber: this.generateOrderNumber(),
+                        createOrder: this.createOrder.bind(this)
                     };
                 }
 
-                generateOrderNumber = () => Math.floor((Math.random() * 10) + 1);
+                generateOrderNumber = (explict) => {
+                    const num = explict === undefined ? 10 : explict;
 
-                componentWillMount(){
-                    const orderNum = this.generateOrderNumber();
+                    return Math.floor((Math.random() * num) + 1);
+                };
 
-                    this.setState(
-                        {
-                            foodTypes: ['taco', 'burger', 'panini', 'sausage'],
-                            meats: ['chicken', 'beef', 'charizo', 'turkey'],
-                            sides: ['french fries', 'tots', 'chips', 'salad'],
-                            orderSizes: ['small', 'medium', 'large'],
-                            orderNumber: orderNum
-                        }
-                    )
-                }
+                createOrder = () => {
+                    const {foodTypes, meats, sides, orderSizes} = this.state;
+
+                    const foodIndex = this.generateOrderNumber(foodTypes.length -1);
+                    const foodType = foodTypes[foodIndex];
+
+                    const meatIndex = this.generateOrderNumber(meats.length -1);
+                    const meatType = meats[meatIndex];
+
+                    const sideIndex = this.generateOrderNumber(sides.length -1);
+                    const sideType = sides[sideIndex];
+
+                    const sizeIndex = this.generateOrderNumber(orderSizes.length -1);
+                    const sizeType = orderSizes[sizeIndex];
+
+                    return {type: foodType, meat: meatType, side: sideType, size: sizeType};
+                };
 
                 render(){
+                    this.createOrder();
+
                     return(
                         <AppContext.Provider value={{foodContext: {...this.state}}}>
                             {this.props.children}
@@ -115,17 +127,15 @@
             
                     this.state = {
                         fullOrder: {}
-                    }
+                    };
 
                     this.handleChange = this.handleChange.bind(this);
                     this.handleSubmit = this.handleSubmit.bind(this);
                 }
 
                 retrieveSurveyOrder = () => {
-                    const foodTypes = this.props.foodContext.foodTypes;
 
-                    console.log('foodTypes', foodTypes[3]);
-                }
+                };
             
                 handleChange(event){
             
