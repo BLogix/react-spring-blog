@@ -76,7 +76,7 @@
                     this.state = {
                         foodTypes: ['taco', 'burger', 'panini', 'sausage'],
                         meats: ['chicken', 'beef', 'charizo', 'turkey'],
-                        sides: ['french fries', 'tots', 'chips', 'salad'],
+                        sides: ['french fries', 'tots', 'chips', 'a salad'],
                         orderSizes: ['small', 'medium', 'large'],
                         orderNumber: this.generateOrderNumber(),
                         createOrder: this.createOrder.bind(this)
@@ -119,6 +119,23 @@
             }
         </script>
 
+        <!-- Star -->
+        <script type="text/babel">
+            function Star(props){
+                console.log(props);
+                return(
+                    <div className={'star-wrapper'}>
+                        {props.grayscale
+                            ?
+                                <img className="filter-grayscale" src={'./resource/yellow-star.png'} alt={'star'}/>
+                            :
+                                <img src={'./resource/yellow-star.png'} alt={'star'}/>
+                        }
+                    </div>
+                )
+            }
+        </script>
+
         <!-- survey -->
         <script type='text/babel'>
             class ViewerDef extends React.Component{
@@ -126,24 +143,32 @@
                     super();
             
                     this.state = {
-                        fullOrder: {}
+                        stars: [
+                            <Star grayscale={false}/>,
+                            <Star grayscale={false}/>,
+                            <Star grayscale={false}/>,
+                            <Star grayscale={false}/>,
+                            <Star grayscale={false}/>
+                        ],
+                        clickedStar: 4
                     };
 
                     this.handleChange = this.handleChange.bind(this);
                     this.handleSubmit = this.handleSubmit.bind(this);
                 }
 
-                retrieveSurveyOrder = () => {
+                retrieveSurveyOrder(){
                     const {createOrder} = this.props.foodContext;
 
                     const order = createOrder();
 
+                    const sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
+
                     return(
                         <section>
-
+                            <p>Thank you for your order of <br/> 1 {sentence}</p>
                         </section>
                     )
-
                 };
             
                 handleChange(event){
@@ -156,8 +181,8 @@
             
                 render(){
                     const {orderNumber} = this.props.foodContext;
+                    const {stars, clickedStar} = this.state;
 
-                    this.retrieveSurveyOrder();
                     return(
                         <div className={'wrapper'}>
                             <h1>Thank You!</h1>
@@ -166,6 +191,16 @@
                             <section className={'form-center'}>
                                 <form onSubmit={this.handleSubmit}>
                                     {this.retrieveSurveyOrder()}
+
+                                    <section className={'star-box'}>
+                                        {stars.map((star, index) => {
+                                            if (index <= clickedStar){
+                                                return <Star onClick={()=>this.setState({clickedStar: index})} grayscale/>
+                                            } else {
+                                                return <Star onClick={()=>this.setState({clickedStar: index})}/>
+                                            }
+                                        })}
+                                    </section>
                                 </form>
                             </section>
                         </div>

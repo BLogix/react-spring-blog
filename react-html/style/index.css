@@ -45,3 +45,14 @@ p{
     background-color: white;
     border-radius: 10px;
 }
+
+.filter-grayscale{
+    filter: grayscale(90%);
+}
+
+.star-box{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-flex;
+}
