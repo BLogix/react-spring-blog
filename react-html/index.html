@@ -144,7 +144,7 @@
                     this.state = {
                         stars: [1,2,3,4,5],
                         rating: [],
-                        clickedStar: 1
+                        clickedStar: 0
                     };
 
                     this.handleChange = this.handleChange.bind(this);
@@ -157,7 +157,13 @@
                     event.preventDefault();
                     const {clickedStar} = this.state;
 
-                    console.log(`Woot! ${clickedStar+1} stars!`);
+                    if (clickedStar + 1 > 1 && clickedStar + 1 < 5){
+                        alert(`Woot! ${clickedStar+1} stars!`);
+                    } else if(clickedStar + 1 === 5){
+                        alert(`Oh snap!!! We got ${clickedStar+1} stars!`);
+                    } else {
+                        alert(`Ohhh... ${clickedStar+1} star`);
+                    }
                 }
 
                 decideGrayscale=(index)=>(index <= this.state.clickedStar);
@@ -178,7 +184,7 @@
             
                 render(){
                     const {orderNumber} = this.props.foodContext;
-                    const {stars, rating, clickedStar} = this.state;
+                    const {stars, rating} = this.state;
 
                     return(
                         <div className={'wrapper'}>
@@ -211,18 +217,6 @@
             const Viewer = withContext(ViewerDef);
         </script>
 
-        <!-- Thank You Page-->
-        <script type="text/babel">
-            function ThankYou(props){
-                return(
-                    <div className='wrapper'>
-                        {}
-                        <p>Thanks for giving us {} stars. We hope we can continue to give you great service</p>
-                    </div>
-                )
-            }
-        </script>
-
         <!-- router -->
         <script type='text/babel'>
             const {BrowserRouter, Route} = ReactRouterDOM;
@@ -232,7 +226,6 @@
                     return(
                         <BrowserRouter>
                             <Route path={'/'} component={Viewer}/>
-                            <Route path={'/thanks'} component={ThankYou}/>
                         </BrowserRouter>
                     )
                 }
