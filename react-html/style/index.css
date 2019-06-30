@@ -77,3 +77,10 @@ p{
     padding: 2% 0;
     text-align: center;
 }
+
+.pointer{
+    cursor: pointer;
+}
+.pointer:hover{
+    filter: drop-shadow(0 0 2px orangered);
+}

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="UTF-8"/>
+        <title>React Your Way</title>
 
         <!-- react 16.8.6 -->
         <script src="js/libs/react.development.js"></script>
@@ -16,8 +18,7 @@
 
         <!-- Babel 6.21.1-->
         <!-- 
-            https://babeljs.io/en/setup 
-            - click on 'In the browser' for this application 
+            https://babeljs.io/en/setup/#usage
             - it explains why we need to use the <script type="text/babel"> tag
         -->
         <script src='js/libs/babel.min.js'></script>
@@ -126,9 +127,9 @@
                     <div className={'star-wrapper'}>
                         {props.grayscale
                             ?
-                                <img className="filter-grayscale" src={'./resource/yellow-star.png'} alt={'star'}/>
+                                <img className="pointer filter-grayscale" src={'./resource/yellow-star.png'} alt={'star'}/>
                             :
-                                <img src={'./resource/yellow-star.png'} alt={'star'}/>
+                                <img className="pointer" src={'./resource/yellow-star.png'} alt={'star'}/>
                         }
                     </div>
                 )
@@ -137,7 +138,7 @@
 
         <!-- survey -->
         <script type='text/babel'>
-            class ViewerDef extends React.Component{
+            class SurveyDef extends React.Component{
                 constructor(){
                     super();
             
@@ -214,7 +215,7 @@
                 }
             }
             
-            const Viewer = withContext(ViewerDef);
+            const Survey = withContext(SurveyDef);
         </script>
 
         <!-- router -->
@@ -225,7 +226,7 @@
                 render(){
                     return(
                         <BrowserRouter>
-                            <Route path={'/'} component={Viewer}/>
+                            <Route path={'/'} component={Survey}/>
                         </BrowserRouter>
                     )
                 }
