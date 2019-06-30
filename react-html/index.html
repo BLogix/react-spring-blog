@@ -122,7 +122,6 @@
         <!-- Star -->
         <script type="text/babel">
             function Star(props){
-                console.log(props);
                 return(
                     <div className={'star-wrapper'}>
                         {props.grayscale
@@ -143,63 +142,64 @@
                     super();
             
                     this.state = {
-                        stars: [
-                            <Star grayscale={false}/>,
-                            <Star grayscale={false}/>,
-                            <Star grayscale={false}/>,
-                            <Star grayscale={false}/>,
-                            <Star grayscale={false}/>
-                        ],
-                        clickedStar: 4
+                        stars: [1,2,3,4,5],
+                        rating: [],
+                        clickedStar: 1
                     };
 
                     this.handleChange = this.handleChange.bind(this);
                     this.handleSubmit = this.handleSubmit.bind(this);
                 }
+            
+                handleChange=(event)=>this.setState({clickedStar: event.currentTarget.id-1});
+            
+                handleSubmit(event){
+                    event.preventDefault();
+                    const {clickedStar} = this.state;
 
-                retrieveSurveyOrder(){
+                    console.log(`Woot! ${clickedStar+1} stars!`);
+                }
+
+                decideGrayscale=(index)=>(index <= this.state.clickedStar);
+
+                componentDidMount(){
                     const {createOrder} = this.props.foodContext;
 
                     const order = createOrder();
 
                     const sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
 
-                    return(
-                        <section>
-                            <p>Thank you for your order of <br/> 1 {sentence}</p>
-                        </section>
-                    )
-                };
-            
-                handleChange(event){
-            
-                }
-            
-                handleSubmit(event){
-                    
+                    this.setState({rating:
+                            <section>
+                                <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
+                            </section>
+                    })
                 }
             
                 render(){
                     const {orderNumber} = this.props.foodContext;
-                    const {stars, clickedStar} = this.state;
+                    const {stars, rating, clickedStar} = this.state;
 
                     return(
                         <div className={'wrapper'}>
                             <h1>Thank You!</h1>
                             <h4>Please Rate Our Food</h4>
                             <p>order no: {orderNumber}</p>
+
                             <section className={'form-center'}>
                                 <form onSubmit={this.handleSubmit}>
-                                    {this.retrieveSurveyOrder()}
+                                    {rating}
 
                                     <section className={'star-box'}>
-                                        {stars.map((star, index) => {
-                                            if (index <= clickedStar){
-                                                return <Star onClick={()=>this.setState({clickedStar: index})} grayscale/>
-                                            } else {
-                                                return <Star onClick={()=>this.setState({clickedStar: index})}/>
-                                            }
-                                        })}
+                                        {stars.map((star, index) =>
+                                            <section key={index} id={`${star}`} onClick={this.handleChange}>
+                                                <Star grayscale={!this.decideGrayscale(index)}/>
+                                            </section>
+                                        )}
+                                    </section>
+
+                                    <section className={'submit-wrapper'}>
+                                        <input className={'submit-btn'} type='submit' value={'Let Us Know'}/>
                                     </section>
                                 </form>
                             </section>
@@ -211,6 +211,18 @@
             const Viewer = withContext(ViewerDef);
         </script>
 
+        <!-- Thank You Page-->
+        <script type="text/babel">
+            function ThankYou(props){
+                return(
+                    <div className='wrapper'>
+                        {}
+                        <p>Thanks for giving us {} stars. We hope we can continue to give you great service</p>
+                    </div>
+                )
+            }
+        </script>
+
         <!-- router -->
         <script type='text/babel'>
             const {BrowserRouter, Route} = ReactRouterDOM;
@@ -220,6 +232,7 @@
                     return(
                         <BrowserRouter>
                             <Route path={'/'} component={Viewer}/>
+                            <Route path={'/thanks'} component={ThankYou}/>
                         </BrowserRouter>
                     )
                 }

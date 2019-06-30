@@ -44,6 +44,7 @@ p{
     height: 300px;
     background-color: white;
     border-radius: 10px;
+    filter: drop-shadow(0 0 2px #333);
 }
 
 .filter-grayscale{
@@ -52,7 +53,25 @@ p{
 
 .star-box{
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    display: inline-flex;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.submit-btn{
+    margin: auto;
+    font-size: 1em;
+    width: 250px;
+    height: 50px;
+    color: white;
+    background-color: black;
+    border-radius: 7px;
+}
+
+.submit-wrapper{
+    width: 100%;
+    padding: 2% 0;
+    text-align: center;
 }
