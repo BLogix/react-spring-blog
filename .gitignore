@@ -3,7 +3,6 @@
 ./react-spring-boot/service/.gradle
 ./react-spring-boot/service/build
 
-build
-*node_modules
-.gradle
-.idea
+./.build
+./.gradle
+./.idea

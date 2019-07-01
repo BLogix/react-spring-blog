@@ -109,8 +109,6 @@
                 };
 
                 render(){
-                    this.createOrder();
-
                     return(
                         <AppContext.Provider value={{foodContext: {...this.state}}}>
                             {this.props.children}
@@ -122,18 +120,16 @@
 
         <!-- Star -->
         <script type="text/babel">
-            function Star(props){
-                return(
-                    <div className={'star-wrapper'}>
-                        {props.grayscale
-                            ?
-                                <img className="pointer filter-grayscale" src={'./resource/yellow-star.png'} alt={'star'}/>
-                            :
-                                <img className="pointer" src={'./resource/yellow-star.png'} alt={'star'}/>
-                        }
-                    </div>
-                )
-            }
+            const Star = (props) => (
+                <div className={'star-wrapper'}>
+                    {props.grayscale
+                        ?
+                            <img className="pointer filter-grayscale" src={'./resource/yellow-star.png'} alt={'star'}/>
+                        :
+                            <img className="pointer" src={'./resource/yellow-star.png'} alt={'star'}/>
+                    }
+                </div>
+            )
         </script>
 
         <!-- survey -->
@@ -222,15 +218,11 @@
         <script type='text/babel'>
             const {BrowserRouter, Route} = ReactRouterDOM;
 
-            class App extends React.Component{
-                render(){
-                    return(
-                        <BrowserRouter>
-                            <Route path={'/'} component={Survey}/>
-                        </BrowserRouter>
-                    )
-                }
-            }
+            const App = () => (
+                <BrowserRouter>
+                    <Route path={'/'} component={Survey}/>
+                </BrowserRouter>
+            );
         </script>
 
         <!-- index.js -->
