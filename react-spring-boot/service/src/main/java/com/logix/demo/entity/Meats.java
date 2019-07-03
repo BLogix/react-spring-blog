@@ -30,6 +30,6 @@ public class Meats {
 
     @Override
     public String toString(){
-        return "Meats [" + "]";
+        return "Meats [name: " + name + "]";
     }
 }

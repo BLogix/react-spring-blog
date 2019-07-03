@@ -1,5 +1,7 @@
 package com.logix.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,6 +10,7 @@ import javax.persistence.Id;
 public class Sizes {
     @Id
     @GeneratedValue
+    @JsonIgnore
     private int id;
     private String name;
 
