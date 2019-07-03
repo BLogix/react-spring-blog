@@ -24,4 +24,9 @@ public class Meats {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString(){
+        return "Meats [" + "]"
+    }
 }
