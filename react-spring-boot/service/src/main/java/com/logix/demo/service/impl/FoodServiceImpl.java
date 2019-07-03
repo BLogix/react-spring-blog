@@ -10,9 +10,11 @@ import com.logix.demo.repository.SizeRepository;
 import com.logix.demo.repository.TypeRepository;
 import com.logix.demo.service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class FoodServiceImpl implements FoodService {
     @Autowired
     private MeatRepository meatRepository;
