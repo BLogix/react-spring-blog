@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export const provideMeats = () => {
-    axios.get(process.env.REACT_APP_SERVICE_URL)
-        .then()
-        .catch();
+    try {
+        return axios.get(process.env.REACT_APP_SERVICE_URL + '/meats')
+    } catch (error){
+        return error
+    }
 };

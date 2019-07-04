@@ -1,6 +1,6 @@
 import React from 'react';
 import {AppContext} from "./Context";
-import * as service from '../../js/util/serviceUtil';
+import * as service from '../../js/util';
 
 export default class ContextProvider extends React.Component{
     constructor(){
@@ -39,6 +39,10 @@ export default class ContextProvider extends React.Component{
 
         return {type: foodType, meat: meatType, side: sideType, size: sizeType};
     };
+
+    componentDidMount(){
+        service.provideMeats();
+    }
 
     render(){
         return(
