@@ -32,7 +32,6 @@ yarn_build {
 
 assemble.dependsOn yarn_build
 
-/*
 task packageYarnApp(type: zip){
     dependsOn yarn_build
     baseName 'yarn-app'
@@ -41,4 +40,17 @@ task packageYarnApp(type: zip){
     from('build'){
         into 'static'
     }
-}*/
+}
+
+configurations {
+    yarnResources
+}
+
+configurations.default.extendsFrom(configurations.yarnResources)
+
+artifacts {
+    yarnResources(packageYarnApp.archivePath) {
+        builtBy packageYarnApp
+        type "jar"
+    }
+}
