@@ -54,3 +54,10 @@ artifacts {
         type "jar"
     }
 }
+
+assemble.dependsOn yarn_build
+assemble.dependsOn packageYarnApp
+
+clean {
+    delete packageYarnApp.archivePath
+}
