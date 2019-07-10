@@ -60,4 +60,22 @@ assemble.dependsOn packageYarnApp
 
 clean {
     delete packageYarnApp.archivePath
+    delete testsExecutedMarkerName
 }
+
+task test(type: YarnTask) {
+    dependsOn assemble
+
+    environment CI: 'true'
+    args = ['run', 'test']
+    inputs.files fileTree('src')
+    inputs.file 'package.json'
+    inputs.file 'yarn.lock'
+    
+    doLast {
+        new File(testsExecutedMarkerName).text = 'delete this file to force re-execution JavaScript tests'
+    }
+    outputs.file testsExecutedMarkerName
+}
+
+check.dependsOn test
