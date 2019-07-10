@@ -55,13 +55,10 @@ artifacts {
     }
 }
 
-assemble.dependsOn yarn_build
+assemble.dependsOn yarn_build //maybe take this line out if it won't build correctly
 assemble.dependsOn packageYarnApp
 
-clean {
-    delete packageYarnApp.archivePath
-    delete testsExecutedMarkerName
-}
+String testsExecutedMarkerName = "${projectDir}/.tests.executed"
 
 task test(type: YarnTask) {
     dependsOn assemble
@@ -79,3 +76,8 @@ task test(type: YarnTask) {
 }
 
 check.dependsOn test
+
+clean {
+    delete packageYarnApp.archivePath
+    delete testsExecutedMarkerName
+}
