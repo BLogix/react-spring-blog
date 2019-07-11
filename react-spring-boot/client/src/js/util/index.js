@@ -1,5 +1,8 @@
-import {provideMeats} from "./serviceUtil";
+import {provideMeats, provideSides, provideSizes, provideTypes} from "./serviceUtil";
 
 export {
-    provideMeats
+    provideMeats,
+    provideSizes,
+    provideTypes,
+    provideSides
 }

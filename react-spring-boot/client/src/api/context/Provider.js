@@ -3,14 +3,14 @@ import {AppContext} from "./Context";
 import * as service from '../../js/util';
 
 export default class ContextProvider extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
-            foodTypes: ['taco', 'burger', 'panini', 'sausage'],
-            meats: ['chicken', 'beef', 'charizo', 'turkey'],
-            sides: ['french fries', 'tots', 'chips', 'a salad'],
-            orderSizes: ['small', 'medium', 'large'],
+            foodTypes: [],
+            meats: [],
+            sides: [],
+            orderSizes: [],
             orderNumber: this.generateOrderNumber(),
             createOrder: this.createOrder.bind(this)
         };
@@ -41,7 +41,16 @@ export default class ContextProvider extends React.Component{
     };
 
     componentDidMount(){
-        service.provideMeats();
+        const {Meats, Sides, Types, Sizes} = Promise.all(
+            [
+                service.provideMeats(),
+                service.provideSides(),
+                service.provideTypes(),
+                service.provideSizes()
+            ]
+        );
+
+        this.setState({meats: Meats, sides: Sides, types: Types, sizes: Sizes});
     }
 
     render(){

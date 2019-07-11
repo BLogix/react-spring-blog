@@ -38,12 +38,22 @@ class Survey extends React.PureComponent{
         const {createOrder} = this.props.foodContext;
 
         const order = createOrder();
+        let sentence;
 
-        const sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
+        if (order === null || order === undefined){
+            sentence = `Sorry we couldn't find your order...`;
+        } else {
+            sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
+        }
 
         this.setState({rating:
                 <section>
-                    <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
+                    {this.order
+                        ?
+                            <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
+                        :
+                            <p>{sentence}</p>
+                    }
                 </section>
         })
     }
