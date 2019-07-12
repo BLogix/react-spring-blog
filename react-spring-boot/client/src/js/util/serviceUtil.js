@@ -1,33 +1,59 @@
 import axios from 'axios';
 
-export const provideMeats = async () => {
+const provideMeats = async () => {
     try {
-        return {Meats: await axios.get(`${process.env.REACT_APP_SERVICE_URL}/meats`)}
+        const {data} = await axios.get(`${process.env.REACT_APP_SERVICE_URL}/meats`);
+
+        return data.map(thing => {
+            return thing.name;
+        });
     } catch (error){
         return error
     }
 };
 
-export const provideSides = async () => {
+const provideSides = async () => {
     try{
-        return {Sides: await axios.get(`${process.env.REACT_APP_SERVICE_URL}/sides`)}
+        const {data} = await axios.get(`${process.env.REACT_APP_SERVICE_URL}/sides`);
+
+        return data.map(thing => {
+            return thing.name;
+        })
     } catch (error){
         return error
     }
 };
 
-export const provideSizes = async () => {
+const provideSizes = async () => {
     try{
-        return {Sizes: await axios.get(`${process.env.REACT_APP_SERVICE_URL}/sizes`)}
+        const {data} = await axios.get(`${process.env.REACT_APP_SERVICE_URL}/sizes`);
+
+        return data.map(thing => {
+            return thing.name;
+        })
     } catch (error){
         return error
     }
 };
 
-export const provideTypes = async () => {
+const provideTypes = async () => {
     try{
-        return {Types: await axios.get(`${process.env.REACT_APP_SERVICE_URL}/types`)}
+        const {data} = await axios.get(`${process.env.REACT_APP_SERVICE_URL}/types`);
+
+        return data.map(thing => {
+            return thing.name;
+        })
     } catch (error) {
         return error
+    }
+};
+
+export const provideAll = async () => {
+    try{
+        const [Meats, Sides, Sizes, Types] = await Promise.all([provideMeats(), provideSides(), provideSizes(), provideTypes()]);
+
+        return {meats: Meats, sides: Sides, sizes: Sizes, types: Types}
+    } catch (error){
+        return error;
     }
 };

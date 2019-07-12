@@ -41,16 +41,20 @@ export default class ContextProvider extends React.Component{
     };
 
     componentDidMount(){
-        const {Meats, Sides, Types, Sizes} = Promise.all(
-            [
-                service.provideMeats(),
-                service.provideSides(),
-                service.provideTypes(),
-                service.provideSizes()
-            ]
-        );
+        service.provideAll()
+            .then(response => {
+                console.log('response', response);
 
-        this.setState({meats: Meats, sides: Sides, types: Types, sizes: Sizes});
+                this.setState({
+                        meats: response.meats,
+                        sides: response.sides,
+                        foodTypes: response.types,
+                        orderSizes: response.sizes
+                    })
+            })
+            .catch(error => {
+                console.log('oh dang! something broke', error)
+            });
     }
 
     render(){

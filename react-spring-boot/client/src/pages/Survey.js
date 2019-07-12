@@ -41,19 +41,14 @@ class Survey extends React.PureComponent{
         let sentence;
 
         if (order === null || order === undefined){
-            sentence = `Sorry we couldn't find your order...`;
+            sentence = `Noneya`;
         } else {
             sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
         }
 
         this.setState({rating:
                 <section>
-                    {this.order
-                        ?
-                            <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
-                        :
-                            <p>{sentence}</p>
-                    }
+                    <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
                 </section>
         })
     }
