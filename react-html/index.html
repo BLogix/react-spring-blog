@@ -32,92 +32,6 @@
         <!-- ----------------------------------------------------------main container -->
         <div id="root"></div>
 
-        <!-- -------------------------------------------------------react context api -->
-        <!-- 
-            * We want to use the Context API for passing data between many component 
-            * without the dependancy of having to pass them through the component tree
-            * 
-            * Reference Links
-            * -> https://reactjs.org/docs/context.html
-            * -> https://medium.com/@niwaa/simple-and-reusable-react-context-api-example-hoc-e1e50c0390ec
-            * 
-            * Main Concepts
-            * -> Provider -> allows for consuming components to subscribe to context changes
-            * -> Consumer -> a react component that subscribes to a consumer     
-        -->
-        <script type="text/babel">
-             //Context
-            const AppContext = React.createContext({
-                foodContext: {
-                    foodTypes: [],
-                    meats: [],
-                    sides: [],
-                    orderSizes: [],
-                    orderNumber: '',
-                    createOrder: () => {}
-                }
-            });
-
-            //Consumer
-            const withContext = (Component)=>{
-                return function ContextComponent(props){
-                    return(
-                        <AppContext.Consumer>
-                            {(contexts) => <Component {...props} {...contexts}/>}
-                        </AppContext.Consumer>
-                    )
-                }
-            };
-
-            //Provider
-            class ContextProvider extends React.Component{
-                constructor(){
-                    super();
-
-                    this.state = {
-                        foodTypes: ['taco', 'burger', 'panini', 'sausage'],
-                        meats: ['chicken', 'beef', 'charizo', 'turkey'],
-                        sides: ['french fries', 'tots', 'chips', 'a salad'],
-                        orderSizes: ['small', 'medium', 'large'],
-                        orderNumber: this.generateOrderNumber(),
-                        createOrder: this.createOrder.bind(this)
-                    };
-                }
-
-                generateOrderNumber = (explict) => {
-                    const num = explict === undefined ? 10 : explict;
-
-                    return Math.floor((Math.random() * num) + 1);
-                };
-
-                createOrder = () => {
-                    const {foodTypes, meats, sides, orderSizes} = this.state;
-
-                    const foodIndex = this.generateOrderNumber(foodTypes.length -1);
-                    const foodType = foodTypes[foodIndex];
-
-                    const meatIndex = this.generateOrderNumber(meats.length -1);
-                    const meatType = meats[meatIndex];
-
-                    const sideIndex = this.generateOrderNumber(sides.length -1);
-                    const sideType = sides[sideIndex];
-
-                    const sizeIndex = this.generateOrderNumber(orderSizes.length -1);
-                    const sizeType = orderSizes[sizeIndex];
-
-                    return {type: foodType, meat: meatType, side: sideType, size: sizeType};
-                };
-
-                render(){
-                    return(
-                        <AppContext.Provider value={{foodContext: {...this.state}}}>
-                            {this.props.children}
-                        </AppContext.Provider>
-                    )
-                }
-            }
-        </script>
-
         <!-- Star -->
         <script type="text/babel">
             const Star = (props) => (
@@ -141,7 +55,13 @@
                     this.state = {
                         stars: [1,2,3,4,5],
                         rating: [],
-                        clickedStar: 0
+                        clickedStar: 0,
+                        order: '',
+                        foodTypes: ['taco', 'burger', 'panini', 'sausage'],
+                        meats: ['chicken', 'beef', 'charizo', 'turkey'],
+                        sides: ['french fries', 'tots', 'chips', 'a salad'],
+                        orderSizes: ['small', 'medium', 'large'],
+                        orderNumber: null
                     };
 
                     this.handleChange = this.handleChange.bind(this);
@@ -165,23 +85,40 @@
 
                 decideGrayscale=(index)=>(index <= this.state.clickedStar);
 
+                generateOrderNumber = (explict) => {
+                    const num = explict === undefined ? 10 : explict;
+
+                    return Math.floor((Math.random() * num) + 1);
+                };
+
+                pullOrder = ({foodTypes, meats, sides, orderSizes}) => {
+                    if (foodTypes && meats && sides && orderSizes){
+                        const foodIdx = this.generateOrderNumber(foodTypes.length-1);
+                        const meatIdx = this.generateOrderNumber(meats.length-1);
+                        const sideIdx = this.generateOrderNumber(sides.length-1);
+                        const orderIdx = this.generateOrderNumber(orderSizes.length-1);
+
+                        const foodType = foodTypes[foodIdx];
+                        const meatType = meats[meatIdx];
+                        const sideType = sides[sideIdx];
+                        const orderType = orderSizes[orderIdx];
+
+                        console.log('order', {type: foodType, meat: meatType, side: sideType, size: orderType});
+
+                        return {type: foodType, meat: meatType, side: sideType, size: orderType}
+                    }
+                };
+
                 componentDidMount(){
-                    const {createOrder} = this.props.foodContext;
-
-                    const order = createOrder();
-
-                    const sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
-
-                    this.setState({rating:
-                            <section>
-                                <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
-                            </section>
+                    this.setState({
+                        orderNumber: this.generateOrderNumber()
                     })
                 }
             
                 render(){
-                    const {orderNumber} = this.props.foodContext;
-                    const {stars, rating} = this.state;
+                    const {stars, orderNumber} = this.state;
+                    const order = this.pullOrder(this.state);
+                    const sentence = order.size !== undefined ?  `${order.size} ${order.meat} ${order.type} with ${order.side}` : '';
 
                     return(
                         <div className={'wrapper'}>
@@ -191,7 +128,16 @@
 
                             <section className={'form-center'}>
                                 <form onSubmit={this.handleSubmit}>
-                                    {rating}
+                                    {order.size !== undefined
+                                    ?
+                                        <section>
+                                            <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
+                                        </section>
+                                    :
+                                        <section>
+                                            <p>Loading order</p>
+                                        </section>
+                                    }
 
                                     <section className={'star-box'}>
                                         {stars.map((star, index) =>
@@ -211,7 +157,7 @@
                 }
             }
             
-            const Survey = withContext(SurveyDef);
+            const Survey = SurveyDef;
         </script>
 
         <!-- router -->
@@ -228,9 +174,7 @@
         <!-- index.js -->
         <script type='text/babel'>
             ReactDOM.render(
-                <ContextProvider>
-                    <App/>
-                </ContextProvider>, 
+                <App/>,
                 document.getElementById('root')
             )
         </script>

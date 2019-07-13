@@ -2,13 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
 import {App} from './App';
-import {ContextProvider} from './api/context';
 import * as serviceWorker from './js/serviceWorker';
 
 ReactDOM.render(
-    <ContextProvider>
-        <App/>
-    </ContextProvider>,
+        <App/>,
     document.getElementById('root')
 );
 

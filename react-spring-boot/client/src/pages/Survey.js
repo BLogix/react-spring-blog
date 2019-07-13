@@ -1,6 +1,6 @@
 import React from 'react';
-import {withContext} from "../api/context";
 import {Star} from '../components/Star';
+import * as service from '../js/util';
 import '../styles/index.css';
 
 class Survey extends React.PureComponent{
@@ -10,7 +10,13 @@ class Survey extends React.PureComponent{
         this.state = {
             stars: [1,2,3,4,5],
             rating: [],
-            clickedStar: 0
+            clickedStar: 0,
+            order: '',
+            foodTypes: [],
+            meats: [],
+            sides: [],
+            orderSizes: [],
+            orderNumber: null
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -34,28 +40,48 @@ class Survey extends React.PureComponent{
 
     decideGrayscale=(index)=>(index <= this.state.clickedStar);
 
-    componentDidMount(){
-        const {createOrder} = this.props.foodContext;
+    generateOrderNumber = (explict) => {
+        const num = explict === undefined ? 10 : explict;
 
-        const order = createOrder();
-        let sentence;
+        return Math.floor((Math.random() * num) + 1);
+    };
 
-        if (order === null || order === undefined){
-            sentence = `Noneya`;
-        } else {
-            sentence = `${order.size} ${order.meat} ${order.type} with ${order.side}`;
+    pullOrder = ({foodTypes, meats, sides, orderSizes}) => {
+        if (foodTypes && meats && sides && orderSizes){
+            const foodIdx = this.generateOrderNumber(foodTypes.length-1);
+            const meatIdx = this.generateOrderNumber(meats.length-1);
+            const sideIdx = this.generateOrderNumber(sides.length-1);
+            const orderIdx = this.generateOrderNumber(orderSizes.length-1);
+
+            const foodType = foodTypes[foodIdx];
+            const meatType = meats[meatIdx];
+            const sideType = sides[sideIdx];
+            const orderType = orderSizes[orderIdx];
+
+            console.log('order', {type: foodType, meat: meatType, side: sideType, size: orderType});
+
+            return {type: foodType, meat: meatType, side: sideType, size: orderType}
         }
+    };
 
-        this.setState({rating:
-                <section>
-                    <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
-                </section>
-        })
+    componentDidMount(){
+        service.provideAll()
+            .then(response => {
+                this.setState({
+                    meats: response.meats,
+                    sides: response.sides,
+                    foodTypes: response.types,
+                    orderSizes: response.sizes,
+                    orderNumber: this.generateOrderNumber()
+                })
+            })
+            .catch();
     }
 
     render(){
-        const {orderNumber} = this.props.foodContext;
-        const {stars, rating} = this.state;
+        const {stars, orderNumber} = this.state;
+        const order = this.pullOrder(this.state);
+        const sentence = order.size !== undefined ?  `${order.size} ${order.meat} ${order.type} with ${order.side}` : '';
 
         return(
             <div className={'wrapper'}>
@@ -65,7 +91,16 @@ class Survey extends React.PureComponent{
 
                 <section className={'form-center'}>
                     <form onSubmit={this.handleSubmit}>
-                        {rating}
+                        {order.size !== undefined
+                            ?
+                            <section>
+                                <p>Thank you for your order of <br/> 1 {sentence} <br/><br/> How many stars do you give us?</p>
+                            </section>
+                            :
+                            <section>
+                                <p>Loading order</p>
+                            </section>
+                        }
 
                         <section className={'star-box'}>
                             {stars.map((star, index) =>
@@ -85,4 +120,4 @@ class Survey extends React.PureComponent{
     }
 }
 
-export default withContext(Survey);
+export default Survey;
