@@ -58,8 +58,6 @@ class Survey extends React.PureComponent{
             const sideType = sides[sideIdx];
             const orderType = orderSizes[orderIdx];
 
-            console.log('order', {type: foodType, meat: meatType, side: sideType, size: orderType});
-
             return {type: foodType, meat: meatType, side: sideType, size: orderType}
         }
     };
