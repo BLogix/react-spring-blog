@@ -5,23 +5,23 @@
         <title>React Your Way</title>
 
         <!-- react 16.8.6 -->
-        <script src="js/libs/react.development.js"></script>
-        <script src="js/libs/react-dom.development.js"></script>
+        <script src="https://unpkg.com/react@16.8.6/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js"></script>
 
-        <script src='js/libs/react-router-dom.min.js'></script>
+        <script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
 
         <!-- 
             Once development work is done then use the minified production libs
         -->
-        <!--script src="js/libs/react.production.min.js"></script>
-        <script src="js/libs/react-dom.production.min.js"></script-->
+        <!--script src="http://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
+        <script src="http://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script-->
 
         <!-- Babel 6.21.1-->
         <!-- 
             https://babeljs.io/en/setup/#usage
             - it explains why we need to use the <script type="text/babel"> tag
         -->
-        <script src='js/libs/babel.min.js'></script>
+        <script src='https://unpkg.com/babel-standalone@6.26.0/babel.min.js'></script>
 
         <!-- Any other libs can be imported using the script tag -->
 
@@ -48,7 +48,7 @@
 
         <!-- survey -->
         <script type='text/babel'>
-            class SurveyDef extends React.Component{
+            class Survey extends React.Component{
                 constructor(){
                     super();
             
@@ -154,8 +154,6 @@
                     )
                 }
             }
-            
-            const Survey = SurveyDef;
         </script>
 
         <!-- router -->
