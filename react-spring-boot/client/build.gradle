@@ -55,7 +55,6 @@ artifacts {
     }
 }
 
- //maybe take this line out if it won't build correctly
 assemble.dependsOn packageYarnApp
 
 String testsExecutedMarkerName = "${projectDir}/.tests.executed"
