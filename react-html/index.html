@@ -108,6 +108,11 @@
                 };
 
                 componentDidMount(){
+                    /*
+                     * If we knew where our service lives we could make the http requests here to retrieve the data we wanted.
+                     * The requests in the react-spring-boot portion of this project could be mimiced here to produce the 
+                     * same result. 
+                     */
                     this.setState({
                         orderNumber: this.generateOrderNumber()
                     })
