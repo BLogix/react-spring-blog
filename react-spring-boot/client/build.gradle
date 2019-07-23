@@ -30,8 +30,6 @@ yarn_build {
     outputs.dir 'build'
 }
 
-assemble.dependsOn yarn_build
-
 task packageYarnApp(type: Zip){
     dependsOn yarn_build
     baseName 'yarn-app'
